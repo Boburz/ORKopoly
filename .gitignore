@@ -1,0 +1,6 @@
+test*
+*.png
+*.jpg
+0*
+tkinter_01.py
+__pycache__
