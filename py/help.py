@@ -43,6 +43,7 @@ class Help:
         v.config(command=help_text.yview)
 
         root.title("Help")
+        root.resizable(False,False)
         root.mainloop()
 
 # for testing

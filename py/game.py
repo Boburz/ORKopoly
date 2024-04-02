@@ -39,7 +39,7 @@ class Game():
         self.powerplant_gain = [pow(2,i) for i in range(11)]
         self.food_gain = [pow(2,i) for i in range(11)]
 
-        self.colors={"back_color":'#550055', "player0_color":'#FFFFFF', "player1_color":'#FF0000', "player2_color":'#0000FF', \
+        self.colors={"back_color":'#DDBB99', "player0_color":'#FFFFFF', "player1_color":'#FF0000', "player2_color":'#0000FF', \
                      "player3_color":'#008000', "player4_color":'#000000', "house_color":'#00FF00', "stone_color":'#808080', \
                      "electr_color":'#FFFF00', "food_color":'#A05000', "corner_color":'#FF8000'}
 
@@ -47,6 +47,7 @@ class Game():
         # build the window
         self.window = tk.Tk()
         self.window.geometry('850x600')
+        self.window.title("ORKopoly")
         self.window.rowconfigure(0, weight=1)
         self.window.columnconfigure((0,1), weight=1)
 
@@ -55,54 +56,56 @@ class Game():
         self.board.grid(row=0, column=1, sticky="wens")
 
         # the control panel on the left
-        self.panel = tk.Frame(self.window)
+        self.panel = tk.Frame(self.window, bg=self.colors["back_color"])
         self.panel.grid(row=0, column=0, sticky="wens")
 
         # the buttons to get help
         self.help_frame = tk.Frame(self.panel)
-        self.help_frame.pack()
-        self.rules_button = tk.Button(self.help_frame, text="help", command=self.open_help, font=("Arial", 20) )
+        self.help_frame.pack(pady=20)
+        self.rules_button = tk.Button(self.help_frame, text="help", command=self.open_help, font=("Arial", 20), bg=self.colors["corner_color"])
         self.rules_button.grid(row=0, column=0)
-        self.numbers_button = tk.Button(self.help_frame, text="numbers", command=self.open_numbers, font=("Arial", 20) )
+        self.numbers_button = tk.Button(self.help_frame, text="numbers", command=self.open_numbers, font=("Arial", 20), bg=self.colors["corner_color"])
         self.numbers_button.grid(row=0, column=1)
 
         # says who's turn it is
         self.top_text = tk.StringVar()
-        self.top_label = tk.Label(self.panel, textvariable=self.top_text, font=("Arial", 20), pady = 20)
+        self.top_label = tk.Label(self.panel, textvariable=self.top_text, font=("Arial", 20), pady = 20, bg=self.colors["back_color"])
         self.top_label.pack()
         self.set_top_text()
 
         # shows how much money etc player has
         self.money_text = tk.StringVar()
         self.set_money_text()
-        self.money_label = tk.Label(self.panel, textvariable=self.money_text, font=("Arial", 20), pady = 20 )
+        self.money_label = tk.Label(self.panel, textvariable=self.money_text, font=("Arial", 20), pady = 20, bg=self.colors["back_color"])
         self.money_label.pack()
 
         # give some info about what happens on this field
         self.info_text = tk.StringVar()
         self.info_text.set("Time to roll the die!")
-        self.info_label = tk.Label(self.panel, textvariable=self.info_text, font=("Arial", 20), pady = 20 )
+        self.info_label = tk.Label(self.panel, textvariable=self.info_text, font=("Arial", 20), pady = 20, bg=self.colors["back_color"])
         self.info_label.pack()
 
         # the single button
-        self.roll_button = tk.Button(self.panel, text="roll", bg=self.colors["corner_color"], command=self.move_player, font=("Arial", 20) )
+        self.roll_button = tk.Button(self.panel, text="roll", command=self.move_player, font=("Arial", 20), bg=self.colors["corner_color"])
         self.roll_button.pack()
 
         # questions
         self.question_text = tk.StringVar()
-        self.question_label = tk.Label(self.panel, textvariable=self.question_text, font=("Arial", 20), pady = 20 )
+        self.question_label = tk.Label(self.panel, textvariable=self.question_text, font=("Arial", 20), pady = 20, bg=self.colors["back_color"])
         self.question_label.pack()
 
         # yes/no button
         self.yes_no_frame = tk.Frame(self.panel)
         self.yes_no_frame.pack()
-        self.yes_button = tk.Button(self.yes_no_frame, text="Yes", command=lambda: self.make_visible(self.money_label), font=("Arial", 20) )
+        self.yes_button = tk.Button(self.yes_no_frame, text="Yes", command=lambda: self.make_visible(self.money_label), font=("Arial", 20), bg=self.colors["corner_color"])
         self.yes_button.grid(row=0, column=0)
-        self.no_button = tk.Button(self.yes_no_frame, text="No", command=lambda: self.make_invisible(self.money_label), font=("Arial", 20) )
+        self.no_button = tk.Button(self.yes_no_frame, text="No", command=lambda: self.make_invisible(self.money_label), font=("Arial", 20), bg=self.colors["corner_color"])
         self.no_button.grid(row=0, column=1)
 
-        # the button at the bottom to finish your turn
-        self.finish_button = tk.Button(self.panel, text="finish turn", command=self.next_player, font=("Arial", 20) )
+        # finish button
+        self.finish_frame = tk.Frame(self.panel, bg=self.colors["back_color"])
+        self.finish_frame.pack(pady=20)
+        self.finish_button = tk.Button(self.finish_frame, text="finish turn", command=self.next_player, font=("Arial", 20), bg=self.colors["corner_color"])
         self.finish_button.pack()
 
 
@@ -123,7 +126,7 @@ class Game():
         self.prepare_rolling()
         self.make_invisible(self.question_label)
         self.make_invisible(self.yes_no_frame)
-        self.make_invisible(self.finish_button)
+        self.make_invisible(self.finish_frame)
 
 
         self.window.mainloop()
@@ -144,7 +147,10 @@ class Game():
         return
 
     def make_visible(self, widget):
-        widget.pack()
+        if widget == self.finish_frame:
+            widget.pack(pady=20)
+        else:
+            widget.pack()
         return
 
     def clear_all_widgets(self):
@@ -152,7 +158,7 @@ class Game():
         self.make_invisible(self.roll_button)
         self.make_invisible(self.question_label)
         self.make_invisible(self.yes_no_frame)
-        self.make_invisible(self.finish_button)
+        self.make_invisible(self.finish_frame)
         return
 
     def set_money_text(self):
@@ -207,7 +213,7 @@ class Game():
         self.clear_all_widgets()
         self.info_text.set("You're out, " + str(self.player_names[owner]) + " took all your money.")
         self.make_visible(self.info_label)
-        self.make_visible(self.finish_button)
+        self.make_visible(self.finish_frame)
 
         return
 
@@ -228,7 +234,7 @@ class Game():
         if len(problems) == 0:
             return ""
 
-        out_string = "Not enough ressources: You need "
+        out_string = "Not enough ressources: You need\n"
         while len(problems) > 0:
             if len(problems) == 1:
                 out_string += problems[0] + "."
@@ -253,8 +259,15 @@ class Game():
         # call the next player
         self.active_player = (self.active_player+1) % len(self.player_lives)
 
+        # test
+        print("Now giving dice to player " + self.player_names[self.active_player])
+
         # check if we are currently skipping our turn
         if self.player_turns_to_skip[self.active_player] > 0:
+
+            # test
+            print(self.player_names[self.active_player] + "needs to skip a turn")
+
             self.player_turns_to_skip[self.active_player] -=1
             self.next_player()
             return
@@ -266,7 +279,7 @@ class Game():
 
         # check if game is over
         if sum(self.player_lives) == 1:
-            self.clear_all_widgets
+            self.clear_all_widgets()
             self.make_invisible(self.top_label)
             self.make_invisible(self.money_label)
 
@@ -274,9 +287,9 @@ class Game():
 
             self.info_text.set(winner + " has won the game!")
 
-            self.finish_button["text"] = "Close"
-            self.finish_button["command"] = self.window.destroy
-            self.make_visible(self.finish_button)
+            self.finish_frame["text"] = "Close"
+            self.finish_frame["command"] = self.window.destroy
+            self.make_visible(self.finish_frame)
 
             return
 
@@ -293,6 +306,7 @@ class Game():
 
         self.make_visible(self.roll_button)
         self.roll_button["text"] = "roll"
+        self.roll_button["command"] = self.move_player
 
         return
 
@@ -337,7 +351,7 @@ class Game():
             self.roll_button.configure(text="roll again")
             return
 
-        self.make_visible(self.finish_button)
+        self.make_visible(self.finish_frame)
 
         # remove all the stuff that (might have) happened because of the corner fields
         self.player_directions[self.active_player] = 1
@@ -436,7 +450,7 @@ class Game():
                 self.no_button["command"] = self.ask_for_upgrades
                 self.make_visible(self.yes_no_frame)
 
-            self.make_visible(self.finish_button)
+            self.make_visible(self.finish_frame)
         else:
             # go directly to upgrading if property cannot be bought
             self.ask_for_upgrades()
@@ -484,7 +498,7 @@ class Game():
                 self.board.all_buttons[position]["command"] = lambda pos=position : self.upgrade_field(pos)
 
         self.make_visible(self.info_label)
-        self.make_visible(self.finish_button)
+        self.make_visible(self.finish_frame)
 
     def upgrade_field(self, position):
         self.clear_all_widgets()
@@ -535,7 +549,7 @@ class Game():
             self.make_visible(self.question_label)
             self.make_visible(self.yes_no_frame)
 
-        self.make_visible(self.finish_button)
+        self.make_visible(self.finish_frame)
 
         return
 
