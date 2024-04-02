@@ -107,11 +107,11 @@ class Game():
 
 
         # test: kill them all
-        for field in [1,5,10,12,14,16,19,21,23,25,28,30,32,34]:
-            self.ownership[field] = 3
-            self.field_levels[field] = 4
-            self.board.all_fields[field]["highlightbackground"] = self.colors["player4_color"]
-            self.field_upgraded(field, 0, 0, 0, 0, [self.house_gain[5],0,0,0])
+#         for field in [1,5,10,12,14,16,19,21,23,25,28,30,32,34]:
+#             self.ownership[field] = 3
+#             self.field_levels[field] = 4
+#             self.board.all_fields[field]["highlightbackground"] = self.colors["player4_color"]
+#             self.field_upgraded(field, 0, 0, 0, 0, [self.house_gain[5],0,0,0])
 
         # remove all players without a name
         for index, name in enumerate(self.player_names):
@@ -201,6 +201,7 @@ class Game():
                 self.ownership[field] = -1
                 self.board.all_fields[field]["highlightbackground"] = self.board.player0_color
                 self.field_levels[field] = 0
+                self.board.all_buttons[field]["text"] = ""
 
         # update GUI
         self.clear_all_widgets()
