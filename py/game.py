@@ -287,8 +287,8 @@ class Game():
 
             self.info_text.set(winner + " has won the game!")
 
-            self.finish_frame["text"] = "Close"
-            self.finish_frame["command"] = self.window.destroy
+            self.finish_button["text"] = "Close"
+            self.finish_button["command"] = self.window.destroy
             self.make_visible(self.finish_frame)
 
             return
